@@ -1,0 +1,71 @@
+// AUTO GENERATED BASED ON Kong $(kong_version), DO NOT EDIT
+// Original source path: $(path).lua
+# local function convert_type(type)
+#   if type_mappers[type] then
+#     return type_mappers[type]
+#   end
+#   return type
+# end
+
+# for _, cls in pairs_sorted(subclasses) do
+import type $(naming_converter(cls)) from "./$(class)/$(naming_converter(cls))"
+# end
+
+export default interface $(naming_converter(class)) {
+
+# for _, cls in pairs_sorted(subclasses) do
+    $(naming_converter(cls)): $(naming_converter(cls));
+# end
+
+# for name, f in pairs_sorted(functions) do
+#   local params = {}
+#   local params_desc = {}
+#   if f.tparam then
+#     for _, v in ipairs(f.tparam) do
+#       local name = v.name
+#       if name == "varargs" then name = "...varargs" end
+#       local t = convert_type(v.type)
+#       if v.optional then name = name .. "?" end
+#       table.insert(params, name .. ": " .. t)
+#       table.insert(params_desc, name .. " " .. v.desc)
+#     end
+#   end
+#   params = table.concat(params, ", ")
+#
+#   local returns = {}
+#   local returns_desc = {}
+#   if f.treturn then
+#     for i, r in ipairs(f.treturn) do
+#       local typ = convert_type(r.type)
+#       local name = ("ret_%d"):format(i)
+#       if typ == "err" then
+#           typ = "string"
+#           name = "err"
+#       end
+#       if #f.treturn > 1 then
+#           table.insert(returns, name .. ": " .. typ)
+#       else
+#           table.insert(returns, typ)
+#       end
+#       table.insert(returns_desc, (r.desc or name))
+#     end
+#   end
+#
+#   local ret = table.concat(returns, ", ")
+#   if #returns > 1 then ret = "[" .. ret .. "]"
+#   elseif #ret == 0 then ret = "null" end
+#
+#   name = naming_converter(name)
+    /**
+    * $((f.usage or ""):gsub("\n", "\n    * "))
+#   if f.tparam then
+    * @param $(table.concat(params_desc, "\n* @param "):gsub("\n", "\n    "))
+#   end
+#   if f.treturn then
+    * @returns $(table.concat(returns_desc, "\n* @returns "):gsub("\n", "\n    "))
+#   end
+    */
+    $(name)($(params)): Promise<$(ret)>;
+
+# end
+}

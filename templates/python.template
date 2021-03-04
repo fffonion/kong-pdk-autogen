@@ -1,0 +1,71 @@
+# -- Python type hint https://www.python.org/dev/peps/pep-0484/
+# -- Python docstring https://www.python.org/dev/peps/pep-0257/
+$(escape("# AUTO GENERATED BASED ON Kong " .. kong_version .. ", DO NOT EDIT"))
+$(escape("# Original source path: " .. path .. ".lua"))
+# local function convert_type(type)
+#   if type_mappers[type] then
+#     return type_mappers[type]
+#   end
+#   return type
+# end
+
+from typing import TypeVar, Any, Union, List, Mapping, Tuple, Optional
+
+number = TypeVar('number', int, float)
+table = TypeVar('table', List[Any], Mapping[str, Any])
+$(escape("# XXX"))
+cdata = Any
+err = str
+
+# for _, cls in pairs_sorted(subclasses) do
+from .$(naming_converter(class)).$(naming_converter(cls)) import $(naming_converter(cls)) as cls_$(naming_converter(cls))
+# end
+
+class $(naming_converter(class))():
+
+# for _, cls in pairs_sorted(subclasses) do
+    $(naming_converter(cls)) = cls_$(naming_converter(cls))
+# end
+
+# for name, f in pairs_sorted(functions) do
+#   local params = {}
+#   local params_desc = {}
+#   if f.tparam then
+#     for _, v in ipairs(f.tparam) do
+#       local name = v.name
+#       if name == "varargs" then name = "*args" end
+#       local t = convert_type(v.type)
+#       if v.optional then t = "Optional[" .. t .. "]" end
+#       table.insert(params, name .. ": " .. t)
+#       table.insert(params_desc, name .. ": " .. v.desc)
+#     end
+#   end
+#   params = table.concat(params, ", ")
+#   local returns = {}
+#   local returns_desc = {}
+#   if f.treturn then
+#     for _, r in pairs_sorted(f.treturn) do
+#       table.insert(returns, convert_type(r.type))
+#       table.insert(returns_desc, (r.desc or name))
+#     end
+#   end
+#   local ret = table.concat(returns, ", ")
+#   if #returns > 1 then ret = "Tuple[" .. ret .. "]"
+#   elseif #ret == 0 then ret = "None" end
+#
+#   name = naming_converter(name)
+    @staticmethod
+    def $(name)($(params)) -> $(ret):
+        """
+        $((f.usage or ""):gsub("\n", "\n        "))
+#   if f.tparam then
+        :param $(table.concat(params_desc, "\n:param "):gsub("\n", "\n        "))
+#   end
+#   if f.treturn then
+        :returns $(table.concat(returns_desc, "\nreturns "):gsub("\n", "\n        "))
+#   end
+        """
+        pass
+
+# end
+    pass

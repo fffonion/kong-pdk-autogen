@@ -12,6 +12,7 @@ local config = {
       },
       -- as-is
       naming_converter = function(...) return ... end,
+      index_file = "__index__",
     },
   
     javascript = {
@@ -31,6 +32,7 @@ local config = {
         end
         return s
       end,
+      index_file = "index",
     }
 
   },

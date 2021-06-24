@@ -3,7 +3,7 @@ local config = {
 
     python = {
       template_file_path = "templates/python.template",
-      output_extension = ".pyi",
+      output_extension = ".py",
       type_mappers = {
         ["string"] = "str",
         ["boolean"] = "bool",
@@ -39,8 +39,11 @@ local config = {
 
   ignored_functions = {
     "kong.table",
-    "kong.log$",
+    "kong.log$", -- avoid collision with kong.log.X
+    "kong.log.LEVEL",
+    "kong.log.inspect", -- TODO: maybe we need it?
     "kong.service.set_tls_cert_key",
+    "kong.service.set_tls_verify_store",
   },
 
   custom_functions = {

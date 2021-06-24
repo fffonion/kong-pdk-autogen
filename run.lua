@@ -111,14 +111,24 @@ local function render(path, node)
   local subclasses = {}
   local need_render
   for k, v in pairs_sorted(node) do
-    if node[k]._attr and not config.ignored_functions_matcher(node[k]._attr.name) then
-      functions[k] = node[k]._attr
-      need_render = true
-    elseif k ~= "_attr" then
-      render(path .. "/" .. k, node[k])
-      table.insert(subclasses, k)
-      need_render = true
+    if node[k]._attr then
+      if not config.ignored_functions_matcher(node[k]._attr.name) then
+        functions[k] = node[k]._attr
+        need_render = true
+      end
     end
+
+    if k ~= "_attr" then
+      local sub_need_render = render(path .. "/" .. k, node[k])
+      if sub_need_render then
+        table.insert(subclasses, k)
+        need_render = true
+      end
+    end
+  end
+
+  if not need_render and (next(functions) or next(subclasses)) then
+    need_render = true
   end
 
   if path ~= arg_output and need_render then
@@ -150,6 +160,8 @@ local function render(path, node)
     f:write(rendered)
     f:close()
   end
+
+  return need_render
 end
 
 render(arg_output, pdk_functions)

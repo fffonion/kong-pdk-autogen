@@ -12,7 +12,7 @@ local config = {
       },
       -- as-is
       naming_converter = function(...) return ... end,
-      index_file = "__index__",
+      index_file = "__init__",
     },
   
     javascript = {

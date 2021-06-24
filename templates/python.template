@@ -18,7 +18,13 @@ cdata = Any
 err = str
 
 # for _, cls in pairs_sorted(subclasses) do
-from .$(naming_converter(class)).$(naming_converter(cls)) import $(naming_converter(cls)) as cls_$(naming_converter(cls))
+#   local imp_path
+#   if use_index_file then -- relative path
+#     imp_path =  "." .. naming_converter(cls)
+#   else -- full path
+#     imp_path = "." .. naming_converter(class) .. "." .. naming_converter(cls)
+#   end
+from $(imp_path) import $(naming_converter(cls)) as cls_$(naming_converter(cls))
 # end
 
 class $(naming_converter(class))():

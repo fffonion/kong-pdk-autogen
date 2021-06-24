@@ -8,7 +8,13 @@
 # end
 
 # for _, cls in pairs_sorted(subclasses) do
-import type $(naming_converter(cls)) from "./$(class)/$(naming_converter(cls))"
+#   local imp_path
+#   if use_index_file then -- relative path
+#     imp_path =  "./" .. naming_converter(cls)
+#   else -- full path
+#     imp_path = "./" .. class .. "./" .. naming_converter(cls)
+#   end
+import type $(naming_converter(cls)) from "$(imp_path)"
 # end
 
 export default interface $(naming_converter(class)) {

@@ -134,7 +134,7 @@ local function render(path, node)
   if path ~= arg_output and need_render then
     local fp = path .. autogen_config.output_extension
     -- if module directory exists, generate path/index.EXT instead
-    if os.rename(path, path) then
+    if os.rename(path, path) and autogen_config.index_file then
       fp = path .. "/" .. autogen_config.index_file .. autogen_config.output_extension
     end
     log.info("Render", fp)
@@ -149,6 +149,7 @@ local function render(path, node)
       naming_converter = autogen_config.naming_converter,
       escape = function(...) return ... end,
       kong_version = KONG_VERSION,
+      use_index_file = not not autogen_config.index_file,
       -- stdlib
       ipairs = ipairs,
       pairs = pairs,

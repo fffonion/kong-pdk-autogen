@@ -43,7 +43,7 @@ class $(naming_converter(class))():
 #       local t = convert_type(v.type)
 #       if v.optional then t = "Optional[" .. t .. "]" end
 #       table.insert(params, name .. ": " .. t)
-#       table.insert(params_desc, name .. ": " .. v.desc)
+#       table.insert(params_desc, name .. ": " .. v.desc .. "!type!" .. name .. ": " .. convert_type(v.type))
 #     end
 #   end
 #   params = table.concat(params, ", ")
@@ -52,7 +52,7 @@ class $(naming_converter(class))():
 #   if f.treturn then
 #     for _, r in pairs_sorted(f.treturn) do
 #       table.insert(returns, convert_type(r.type))
-#       table.insert(returns_desc, (r.desc or name))
+#       table.insert(returns_desc, (r.desc or name) .. "!return!" .. convert_type(r.type))
 #     end
 #   end
 #   local ret = table.concat(returns, ", ")
@@ -60,15 +60,32 @@ class $(naming_converter(class))():
 #   elseif #ret == 0 then ret = "None" end
 #
 #   name = naming_converter(name)
+#   indent_1 = "        "
+#   indent_2 = "            "
     @staticmethod
     def $(name)($(params)) -> $(ret):
         """
-        $((f.usage or ""):gsub("\n", "\n        "))
+
+#   if f.desc then
+            $(f.desc:gsub("\n", "\n" .. indent_2))
+
+#   end
+#   if f.phases and #f.phases > 0 then
+        Phases:
+            $(table.concat(f.phases, ", "))
+
+# end
+#   if f.usage and #f.usage > 0 then
+        Example:
+            $((f.usage or ""):gsub("local ", ""):gsub(" then\n%s*", ":\n    "):gsub("else\n%s*", "else:\n    "):gsub("%s*end\n*", ""):gsub("%-%-%s*", "# "):gsub("\n", "\n\n" .. indent_2))
+
+# end
 #   if f.tparam then
-        :param $(table.concat(params_desc, "\n:param "):gsub("\n", "\n        "))
+        :parameter $(table.concat(params_desc, "!n" .. indent_1 .. ":parameter "):gsub("\n", "\n" .. indent_2):gsub("!type!", "\n" .. indent_1 .. ":type "):gsub("!n", "\n"))
+
 #   end
 #   if f.treturn then
-        :returns $(table.concat(returns_desc, "\nreturns "):gsub("\n", "\n        "))
+        :return: $(table.concat(returns_desc, "!n" .. indent_1 .. ":return: "):gsub("\n", "\n" .. indent_2):gsub("!return!", "\n\n" .. indent_1 .. ":rtype: "):gsub("!n", "\n"))
 #   end
         """
         pass

@@ -84,7 +84,7 @@ local section_parsers = {
       line = line:sub(7) -- skip a space as well
     end
     local type, name, desc = line:match("([^%s]+)%s+([a-zA-Z0-9_]+)%s*(.*)")
-  
+
     if type == "..." then
       desc = name .. " " .. desc
       name = "varargs"
@@ -92,14 +92,14 @@ local section_parsers = {
     end
 
     type = check_type(type, logger)
-  
+
     table.insert(known, {
       name = name,
       optional = optional,
       type = type,
       desc = desc,
     })
-  
+
     return known
   end,
 
@@ -135,7 +135,7 @@ local function parse_luadoc(f, known)
     if line == nil then
       break
     end
-  
+
     ctx.lineno = ctx.lineno + 1
 
     -- "-- @function kong.foo.bar"
@@ -155,7 +155,9 @@ local function parse_luadoc(f, known)
       ctx.funcname = rest
       func._attr = {
         name = rest,
+        desc = table.concat(buf, "\n")
       }
+      buf = {}
     -- process sections for current function
     elseif func then
       -- tXXX are typed version of XXX, we will redirect them in same parser
@@ -194,6 +196,15 @@ local function parse_luadoc(f, known)
       -- set section and buffer based on current line
       if sect then
         section = sect
+      end
+    else
+      if line:match("^%s*%-%-%-") then -- if start comment block
+        buf = {}
+      end
+
+      local comment_line = line:match("^%s*%-%-%s(.*)")
+      if comment_line then
+        table.insert(buf, comment_line)
       end
     end
   end

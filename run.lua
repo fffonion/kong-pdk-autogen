@@ -1,5 +1,8 @@
 #!/usr/bin/env resty
 
+-- silence _G warnings
+setmetatable(_G, nil)
+
 local cjson = require("cjson")
 local pl_app = require("pl.app")
 local pl_tablex = require("pl.tablex")
@@ -75,6 +78,25 @@ for fname, fbody in pairs(config.custom_functions) do
     ptr._attr = fbody
   end
   ptr._attr.name = fname
+end
+
+for fname, fbody in pairs(config.types_override) do
+  local ptr = pdk_functions
+  for f in fname:gmatch('[^%.]+') do
+    if not ptr[f] then
+      ptr[f] = {}
+    end
+    ptr = ptr[f]
+  end
+  for _, attr in ipairs({ "treturn", "tparam" }) do
+    if fbody[attr] then
+      for i, t in ipairs(fbody[attr]) do
+        if ptr._attr[attr] and ptr._attr[attr][i] then
+          ptr._attr[attr][i].type = t.type
+        end
+      end
+    end
+  end
 end
 -- Ends parser routine
 

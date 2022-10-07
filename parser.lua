@@ -34,6 +34,7 @@ local known_types = {
   err = true,
   ["nil"] = true,
   any = true,
+  bytes = true,
 }
 
 local function check_type(type, logger)

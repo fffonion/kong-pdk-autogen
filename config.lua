@@ -185,6 +185,18 @@ local config = {
     ["kong.log.notice"] = "kong.log.LEVEL",
     ["kong.log.info"] = "kong.log.LEVEL",
     ["kong.log.debug"] = "kong.log.LEVEL",
+
+    ["kong.request.get_uri_captures"] = {
+      treturn = {
+        {
+          type = "any",
+        },
+      },
+      phases = {
+        -- TODO
+      },
+      desc = "get the captured URI segments, including both named and unnamed segments",
+    },
   },
 
   types_override = {

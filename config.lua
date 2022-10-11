@@ -217,6 +217,14 @@ local config = {
         },
       },
     },
+    ["kong.response.exit"] = {
+      tparam = {
+        {
+          name = "body",
+          type = "bytes",
+        },
+      },
+    },
   },
 }
 

@@ -220,6 +220,10 @@ local config = {
     ["kong.response.exit"] = {
       tparam = {
         {
+          name = "status",
+          type = "number",
+        },
+        {
           name = "body",
           type = "bytes",
         },

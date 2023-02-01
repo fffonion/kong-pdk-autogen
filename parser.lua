@@ -107,7 +107,7 @@ local section_parsers = {
   phases = function(line, _, logger)
     local phases = {}
     for phase in line:gmatch('[^,%s]+') do
-      phase = phase:match('`?(.+)`?')
+      phase = phase:match('`?([a-z_]+)`?')
       table.insert(phases, phase)
     end
     return phases

@@ -134,7 +134,10 @@ local function render(path, node)
   local need_render
   for k, v in pairs_sorted(node) do
     if node[k]._attr then
-      if not config.ignored_functions_matcher(node[k]._attr.name) then
+      local phases = node[k]._attr.phases
+      if phases and #phases == 1 and phases[1] == "body_filter" then
+        print("- skip body_filter only function: " .. node[k]._attr.name)
+      elseif not config.ignored_functions_matcher(node[k]._attr.name) then
         functions[k] = node[k]._attr
         need_render = true
       end

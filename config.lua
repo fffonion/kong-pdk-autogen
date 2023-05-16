@@ -60,7 +60,7 @@ local config = {
       treturn = {
         {
           type = "string",
-          desc = "the NGINX version string",
+          desc = "get NGINX variable value",
         },
       },
       phases = {

@@ -9,6 +9,7 @@ local config = {
         ["boolean"] = "bool",
         ["any"] = "Any",
         ["nil"] = "None",
+        ["array"] = "table",
       },
       -- as-is
       naming_converter = function(...) return ... end,
@@ -22,6 +23,7 @@ local config = {
         ["table"] = "Array<string | number> | object",
         ["nil"] = "null",
         ["bytes"] = "Buffer",
+        ["array"] = "Array<string | number>",
       },
       -- underscore_case to camelCase
       naming_converter = function(s, cap)
@@ -45,6 +47,7 @@ local config = {
     "kong.log.inspect", -- TODO: maybe we need it?
     "kong.service.set_tls_cert_key",
     "kong.service.set_tls_verify_store",
+    "kong.service.set_target_retry_callback", -- accepts a Lua function, unsupported
     "kong.tracing", -- tracing returns lua table, so doesn't work out of the box
     "kong.vault.try", -- accepts a Lua function, unsupported
   },
